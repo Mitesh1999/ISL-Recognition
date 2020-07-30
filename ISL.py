@@ -2,7 +2,7 @@
 
 def preprocess(action_frame):
 
-    blur = cv2.GaussianBlur(action_frame, (3,3), 0)
+    blur = cv2.GaussianBlur(action_frame, (3,3), 0) # Removes high frequency components
     hsv = cv2.cvtColor(blur, cv2.COLOR_RGB2HSV)
 
     lower_color = np.array([108, 23, 82])
@@ -15,11 +15,12 @@ def preprocess(action_frame):
     erode = cv2.erode(blur, kernel)
     hsv_d = cv2.dilate(erode, kernel)
     hsv_d2 = cv2.filter2D(hsv_d, -1, kernel)
-    return hsv_d2
+    return mask
 
 import cv2
 import numpy as np
 from PIL import Image
+import time
 #import requests
 
 # Import the Model
@@ -28,11 +29,12 @@ model = joblib.load('ISL-CNN-Model2')
 alpha = {}
 count = 0
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 maxAlpha = 'A'
 while True:
     ret, frame = cap.read()
     roi = frame[200:420, 200:420]
+    
     cv2.rectangle(frame, (200,200), (420,420), (0,255,0), 0)
     if count == 25:
         count=0
@@ -69,6 +71,5 @@ while True:
     k = cv2.waitKey(30) & 0xff
     if(k==27):
         break
-    
 cap.release()
 cv2.destroyAllWindows()

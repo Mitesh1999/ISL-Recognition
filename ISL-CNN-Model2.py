@@ -34,11 +34,11 @@ train_datagen = ImageDataGenerator(
             rotation_range=5,
             width_shift_range=0.2,
             height_shift_range=0.2,
-            rescale=1/255,
+            rescale=1./255,
             validation_split=0.2
         )
 
-test_datagen = ImageDataGenerator(rescale=1./255)
+# test_datagen = ImageDataGenerator(rescale=1./255)
 
 train_generator = train_datagen.flow_from_directory(
         'ISL Gestures DataSet',
